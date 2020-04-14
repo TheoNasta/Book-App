@@ -3,3 +3,8 @@ body,
 .root {
   height: 100%;
 }
+button {
+  font-family: "SF Pro Display", "SF Pro Icons", "Helvetica Neue", "Helvetica",
+    sans-serif;
+  background-color: white;
+}
