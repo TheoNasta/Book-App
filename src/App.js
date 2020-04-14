@@ -2,10 +2,10 @@ import React from "react";
 // import * as BooksAPI from './BooksAPI'
 import "./App.css";
 import styled, { css } from "styled-components";
-import SearchModal from "./search";
-import Heading from "./headings";
-import Header from "./header";
-import Book from "./book";
+import SearchModal from "./Search";
+import Heading from "./Headings";
+import Header from "./Header";
+import Book from "./Book";
 import { getAll } from "./BooksAPI";
 import { Route } from "react-router-dom";
 
@@ -24,6 +24,18 @@ class BooksApp extends React.Component {
       read: [],
     },
   };
+
+  getBookIndex() {
+    const shelveNames = ["currentlyReading", "wantToRead", "read"];
+    const bookIndex = {};
+    shelveNames.forEach((shelfName) => {
+      const booksIdsOnShelf = this.state.shelves[shelfName];
+      booksIdsOnShelf.forEach((bookId) => {
+        bookIndex[bookId] = shelfName;
+      });
+    });
+    return bookIndex;
+  }
 
   componentDidMount() {
     getAll().then((books) =>
@@ -56,7 +68,7 @@ class BooksApp extends React.Component {
     };
 
     const renderBook = (book) => {
-      return <Book book={book} onUpdate={updateBookOrder}></Book>;
+      return <Book book={book} onUpdate={updateBookOrder} key={book.id}></Book>;
     };
 
     return (
@@ -109,6 +121,7 @@ class BooksApp extends React.Component {
           path="/search"
           render={() => (
             <SearchModal
+              bookIndex={this.getBookIndex()}
               onUpdate={updateBookOrder}
               onNavigate={() => {
                 this.setState(() => ({ showSearchPage: false }));

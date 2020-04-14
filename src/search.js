@@ -1,7 +1,7 @@
 import React from "react";
 import styled, { css } from "styled-components";
 import { search } from "./BooksAPI";
-import Book from "./book";
+import Book from "./Book";
 import { Link } from "react-router-dom";
 
 class SearchModal extends React.Component {
@@ -9,18 +9,6 @@ class SearchModal extends React.Component {
     searchQuery: "",
     searchResults: [],
   };
-
-  // componentDidMount() {
-  //   search(this.state.searchQuery).then((books) =>
-  //     this.setState({ searchResults: books })
-  //   );
-  // }
-
-  // updateQuery = (searchQuery) => {
-  //   this.setState({
-  //     searchQuery: searchQuery.trim(),
-  //   });
-  // };
 
   updateQuery = (searchQuery) => {
     search(searchQuery).then((books) => {
@@ -74,9 +62,17 @@ class SearchModal extends React.Component {
         />
         <SearchResults>
           {searchResults &&
-            searchResults.map((book) => (
-              <Book book={book} onUpdate={this.props.onUpdate}></Book>
-            ))}
+            searchResults.map((book) => {
+              if (!book.shelf) book.shelf = this.props.bookIndex[book.id];
+              return (
+                <Book
+                  book={book}
+                  onUpdate={this.props.onUpdate}
+                  key={book.id}
+                  alreadyOnShelf
+                ></Book>
+              );
+            })}
         </SearchResults>
       </SearchWrapper>
     );
@@ -87,6 +83,8 @@ const SearchWrapper = styled.div`
   width: 100vw;
   height: 100vh;
   background-color: white;
+  display: flex;
+  flex-direction: column;
 
   .searchBar {
     width: 1080px;
@@ -114,6 +112,9 @@ const SearchWrapper = styled.div`
     margin-right: 2.5%;
     margin-top: 15px;
     cursor: pointer;
+    align-items: center;
+    display: flex;
+    justify-content: flex-end;
 
     svg {
       margin-right: 6px;
@@ -128,6 +129,8 @@ const SearchResults = styled.div`
   margin-top: 100px;
   margin-left: auto;
   margin-right: auto;
+  display: flex;
+  flex-wrap: wrap;
 `;
 
 export default SearchModal;

@@ -1,15 +1,11 @@
 import React from "react";
 import styled, { css } from "styled-components";
-import Heading from "./headings";
-import Paragraph from "./paragraph";
+import Heading from "./Headings";
+import Paragraph from "./Paragraph";
 import { update } from "./BooksAPI";
-import BookOptions from "./bookOptions";
+import BookOptions from "./BookOptions";
 
 const Book = ({ book, onUpdate }) => {
-  console.log(book);
-
-  const shelf = "wantToRead";
-
   return (
     <StyledBook>
       {getBookCover(book)}
